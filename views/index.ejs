@@ -1,0 +1,13 @@
+<html>
+   <body>
+      <form action="/" method="post">
+        <input type="text" name="nameOfTask" required>
+        <button type="submit">add task</button>
+      </form>
+      <ul>
+       <% for(var i=0;i<Tasks.length;i++){ %>
+            <li> <%= Tasks[i] %> </li>
+       <% } %>
+      </ul>
+   </body>
+</html>
