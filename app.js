@@ -16,28 +16,80 @@ async function main() {
 
 var lists = [];
 
+
+const taskSchema = new mongoose.Schema({
+    name: String,
+    id: Number
+
+  });
+  const TaskModel = mongoose.model('task', taskSchema);
+
+
+
+var lists = [];
+
+
+
 app.get("/",function(req,res){
-    res.render('index', {Tasks : lists});
+    lists = [];
+   
+    getAllTasks();
+    async function getAllTasks(){
+        const allTask = await TaskModel.find({});
+ 
+        allTask.forEach(function(eachTask){
+           lists.push(eachTask.name);
+        })
+        res.render('index', {Tasks : lists});
+    }
+   
 })
 
 
-const taskSchema = new mongoose.Schema({
-    name: String
-  });
-  const TaskModel = mongoose.model('task', taskSchema);
 
 app.post("/",function(req,res){
     const formInput = req.body;
     const taskIs = formInput.nameOfTask;
-    lists.push(taskIs);
-    //console.log(lists);
-
+    
+    
     const eachTask = new TaskModel({ name: taskIs });
     eachTask.save().then("pushed succesfully").catch();
-   // console.log(silence.name);
+
     res.redirect("/");
 })
 
+
+app.post("/deleteTask", function(req,res){
+    const gg = req.body;
+    const indexOfTask = gg.submit;
+
+
+
+    deleteTask();
+    async function deleteTask(){
+
+        let idToBeDelted;
+        const allTask = await TaskModel.find({});
+        for(let i=0;i<allTask.length;i++)
+        {
+            
+            if(i==indexOfTask){
+                idToBeDelted =  allTask[i]._id;
+                break;
+            }
+        } 
+       
+   
+        await TaskModel.deleteOne({ _id: idToBeDelted });
+        
+        
+    }
+  
+
+    
+
+    res.redirect("/");
+})
 app.listen(4000, function(){
     console.log("app is running on port 4000");
 })

@@ -7,6 +7,9 @@
       <ul>
        <% for(var i=0;i<Tasks.length;i++){ %>
             <li> <%= Tasks[i] %> </li>
+            <form action="/deleteTask" method="post">
+                <button type="submit" name="submit" value="<%- i %>">Delete Task</button>
+            </form>
        <% } %>
       </ul>
    </body>
