@@ -4,6 +4,7 @@ const bodyparser= require('body-parser');
 app = express();
 app.set('view engine', 'ejs');
 app.use(bodyparser.urlencoded({extended:true}));
+app.use(express.static('public'));
 
 
 // db connection
@@ -14,15 +15,16 @@ async function main() {
 }
 
 
-var lists = [];
 
+var lists = [];
 
 const taskSchema = new mongoose.Schema({
     name: String,
     id: Number
 
   });
-  const TaskModel = mongoose.model('task', taskSchema);
+
+const TaskModel = mongoose.model('task', taskSchema);
 
 
 
@@ -40,8 +42,10 @@ app.get("/",function(req,res){
         allTask.forEach(function(eachTask){
            lists.push(eachTask.name);
         })
-        res.render('index', {Tasks : lists});
+      //  res.render('index', {Tasks : lists});
+      res.render('index2', {Tasks : lists});
     }
+    //res.sendFile(__dirname+"/boot.html");
    
 })
 
@@ -57,6 +61,8 @@ app.post("/",function(req,res){
 
     res.redirect("/");
 })
+
+
 
 
 app.post("/deleteTask", function(req,res){
@@ -89,6 +95,10 @@ app.post("/deleteTask", function(req,res){
     
 
     res.redirect("/");
+})
+app.post("/editTask", function(req,res){
+    const gg = req.body;
+    console.log(gg);
 })
 app.listen(4000, function(){
     console.log("app is running on port 4000");
